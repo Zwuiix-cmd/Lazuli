@@ -32,8 +32,6 @@ use Lazuli\Utils\Registries;
 use Nexly\Events\Impl\BlockRegistryEvent;
 use Nexly\Events\NexlyEventManager as NexlyEvent;
 use pocketmine\plugin\PluginBase;
-use zwuiix\extpack\ExtPack;
-use zwuiix\extpack\PackPacketHooker;
 use function count;
 use function sprintf;
 
@@ -51,5 +49,5 @@ class Lazuli extends PluginBase
 	{
 		Registries::validate();
 		$this->getLogger()->notice(sprintf("%d blocks loaded", count(LazuliBlocks::getAll())));
-    }
+	}
 }

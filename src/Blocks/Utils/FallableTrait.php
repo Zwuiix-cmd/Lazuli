@@ -32,7 +32,8 @@ use pocketmine\entity\object\FallingBlock;
 use pocketmine\event\entity\EntityBlockChangeEvent;
 use pocketmine\math\Facing;
 
-trait FallableTrait{
+trait FallableTrait
+{
 	use PMFallableTrait {
 		onNearbyBlockChange as onChange;
 	}
@@ -43,29 +44,30 @@ trait FallableTrait{
 		$this->onChange();
 	}
 
-	public function onHitGround(FallingBlock $blockEntity) : bool{
+	public function onHitGround(FallingBlock $blockEntity) : bool
+	{
 		$loc = $blockEntity->getLocation();
 		$world = $loc->getWorld();
 
 		$pos = $loc->floor();
-		if(!$world->getBlock($pos)->canBeReplaced()){
+		if (!$world->getBlock($pos)->canBeReplaced()) {
 			$pos = $pos->getSide(Facing::UP);
 		}
 
 		$targetBlock = $world->getBlock($pos);
-		if($targetBlock->canBeReplaced() && $world->isInWorld($pos->getFloorX(), $pos->getFloorY(), $pos->getFloorZ())){
+		if ($targetBlock->canBeReplaced() && $world->isInWorld($pos->getFloorX(), $pos->getFloorY(), $pos->getFloorZ())) {
 			$blockResult = $this->tickFalling() ?? $this;
 
 			$ev = new EntityBlockChangeEvent($blockEntity, $targetBlock, $blockResult);
 			$ev->call();
-			if(!$ev->isCancelled()){
+			if (!$ev->isCancelled()) {
 				$b = $ev->getTo();
 				$world->setBlock($pos, $b);
 
 				$placed = $world->getBlock($pos);
 				$placed->onNearbyBlockChange();
 
-				if($b instanceof Fallable && ($sound = $b->getLandSound()) !== null){
+				if ($b instanceof Fallable && ($sound = $b->getLandSound()) !== null) {
 					$world->addSound($pos->add(0.5, 0.5, 0.5), $sound);
 				}
 			}

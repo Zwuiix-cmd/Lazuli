@@ -47,7 +47,8 @@ use function mb_strtoupper;
  * It must be regenerated whenever the source class is changed.
  * @see build/codegen/registry-interface.php
  */
-final class LazuliBlocks{
+final class LazuliBlocks
+{
 	private static Slab $_mAMETHYST_SLAB;
 	private static Stair $_mAMETHYST_STAIRS;
 	private static ConcreteFence $_mBLACK_CONCRETE_FENCE;
@@ -261,7 +262,8 @@ final class LazuliBlocks{
 
 	private static bool $initialized = false;
 
-	private function __construct(){
+	private function __construct()
+	{
 		//NOOP
 	}
 
@@ -271,7 +273,8 @@ final class LazuliBlocks{
 	 *
 	 * @phpstan-param \Closure(never) : Transparent $closure
 	 */
-	private static function unsafeAssign(\Closure $closure, Transparent $memberValue) : void{
+	private static function unsafeAssign(\Closure $closure, Transparent $memberValue) : void
+	{
 		/**
 		 * This type is not correct either (the param is actually a subtype of Transparent) but it's called
 		 * unsafeAssign for a reason :)
@@ -284,7 +287,8 @@ final class LazuliBlocks{
 	 * @return \Closure[]
 	 * @phpstan-return array<string, \Closure(never) : Transparent>
 	 */
-	private static function getInitAssigners() : array{
+	private static function getInitAssigners() : array
+	{
 		return [
 			"amethyst_slab" => fn(Slab $v) => self::$_mAMETHYST_SLAB = $v,
 			"amethyst_stairs" => fn(Stair $v) => self::$_mAMETHYST_STAIRS = $v,
@@ -493,19 +497,20 @@ final class LazuliBlocks{
 		];
 	}
 
-	private static function init() : void{
+	private static function init() : void
+	{
 		//This nasty mess of closures allows us to suppress PHPStan type assignment errors in one place instead of
 		//on every single assignment. This will only run one time on first init, so it's fine for performance.
-		if(self::$initialized){
+		if (self::$initialized) {
 			throw new \LogicException("Circular dependency detected - use RegistrySource->registerDelayed() if the circular dependency can't be avoided");
 		}
 		self::$initialized = true;
 		$assigners = self::getInitAssigners();
 		$assigned = [];
 		$source = new LazuliBlocksInputs();
-		foreach($source->getAllValues() as $name => $value){
+		foreach ($source->getAllValues() as $name => $value) {
 			$assigner = $assigners[$name] ?? throw new \LogicException("Unexpected source registry member \"$name\" (code probably needs regenerating)");
-			if(isset($assigned[$name])){
+			if (isset($assigned[$name])) {
 				//this should be prevented by RegistrySource, but it doesn't hurt to have some redundancy
 				throw new \LogicException("Repeated registry source member \"$name\"");
 			}
@@ -514,7 +519,7 @@ final class LazuliBlocks{
 			unset($assigners[$name]);
 			self::unsafeAssign($assigner, $value);
 		}
-		if(count($assigners) > 0){
+		if (count($assigners) > 0) {
 			throw new \LogicException("Missing values for registry members (code probably needs regenerating): " . implode(", ", array_keys($assigners)));
 		}
 	}
@@ -523,1028 +528,1643 @@ final class LazuliBlocks{
 	 * @return Transparent[]
 	 * @phpstan-return array<string, Transparent>
 	 */
-	public static function getAll() : array{
-		if(!isset(self::$members)){ self::init(); }
+	public static function getAll() : array
+	{
+		if (!isset(self::$members)) {
+			self::init();
+		}
 		return Utils::cloneObjectArray(self::$members);
 	}
 
-	public static function AMETHYST_SLAB() : Slab{
-		if(!isset(self::$_mAMETHYST_SLAB)){ self::init(); }
+	public static function AMETHYST_SLAB() : Slab
+	{
+		if (!isset(self::$_mAMETHYST_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mAMETHYST_SLAB;
 	}
 
-	public static function AMETHYST_STAIRS() : Stair{
-		if(!isset(self::$_mAMETHYST_STAIRS)){ self::init(); }
+	public static function AMETHYST_STAIRS() : Stair
+	{
+		if (!isset(self::$_mAMETHYST_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mAMETHYST_STAIRS;
 	}
 
-	public static function BLACK_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mBLACK_CONCRETE_FENCE)){ self::init(); }
+	public static function BLACK_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mBLACK_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_CONCRETE_FENCE;
 	}
 
-	public static function BLACK_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mBLACK_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function BLACK_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mBLACK_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_CONCRETE_FENCE_GATE;
 	}
 
-	public static function BLACK_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mBLACK_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function BLACK_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mBLACK_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function BLACK_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mBLACK_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function BLACK_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mBLACK_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function BLACK_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mBLACK_CONCRETE_WALL)){ self::init(); }
+	public static function BLACK_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mBLACK_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_CONCRETE_WALL;
 	}
 
-	public static function BLACK_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mBLACK_WOOL_FENCE)){ self::init(); }
+	public static function BLACK_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mBLACK_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_WOOL_FENCE;
 	}
 
-	public static function BLACK_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mBLACK_WOOL_FENCE_GATE)){ self::init(); }
+	public static function BLACK_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mBLACK_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_WOOL_FENCE_GATE;
 	}
 
-	public static function BLACK_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mBLACK_WOOL_WALL)){ self::init(); }
+	public static function BLACK_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mBLACK_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBLACK_WOOL_WALL;
 	}
 
-	public static function BLUE_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mBLUE_CONCRETE_FENCE)){ self::init(); }
+	public static function BLUE_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mBLUE_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_CONCRETE_FENCE;
 	}
 
-	public static function BLUE_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mBLUE_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function BLUE_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mBLUE_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_CONCRETE_FENCE_GATE;
 	}
 
-	public static function BLUE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mBLUE_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function BLUE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mBLUE_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function BLUE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mBLUE_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function BLUE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mBLUE_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function BLUE_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mBLUE_CONCRETE_WALL)){ self::init(); }
+	public static function BLUE_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mBLUE_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_CONCRETE_WALL;
 	}
 
-	public static function BLUE_ICE_SLAB() : Slab{
-		if(!isset(self::$_mBLUE_ICE_SLAB)){ self::init(); }
+	public static function BLUE_ICE_SLAB() : Slab
+	{
+		if (!isset(self::$_mBLUE_ICE_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_ICE_SLAB;
 	}
 
-	public static function BLUE_ICE_STAIRS() : Stair{
-		if(!isset(self::$_mBLUE_ICE_STAIRS)){ self::init(); }
+	public static function BLUE_ICE_STAIRS() : Stair
+	{
+		if (!isset(self::$_mBLUE_ICE_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_ICE_STAIRS;
 	}
 
-	public static function BLUE_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mBLUE_WOOL_FENCE)){ self::init(); }
+	public static function BLUE_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mBLUE_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_WOOL_FENCE;
 	}
 
-	public static function BLUE_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mBLUE_WOOL_FENCE_GATE)){ self::init(); }
+	public static function BLUE_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mBLUE_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_WOOL_FENCE_GATE;
 	}
 
-	public static function BLUE_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mBLUE_WOOL_WALL)){ self::init(); }
+	public static function BLUE_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mBLUE_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBLUE_WOOL_WALL;
 	}
 
-	public static function BROWN_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mBROWN_CONCRETE_FENCE)){ self::init(); }
+	public static function BROWN_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mBROWN_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_CONCRETE_FENCE;
 	}
 
-	public static function BROWN_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mBROWN_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function BROWN_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mBROWN_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_CONCRETE_FENCE_GATE;
 	}
 
-	public static function BROWN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mBROWN_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function BROWN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mBROWN_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function BROWN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mBROWN_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function BROWN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mBROWN_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function BROWN_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mBROWN_CONCRETE_WALL)){ self::init(); }
+	public static function BROWN_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mBROWN_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_CONCRETE_WALL;
 	}
 
-	public static function BROWN_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mBROWN_WOOL_FENCE)){ self::init(); }
+	public static function BROWN_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mBROWN_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_WOOL_FENCE;
 	}
 
-	public static function BROWN_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mBROWN_WOOL_FENCE_GATE)){ self::init(); }
+	public static function BROWN_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mBROWN_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_WOOL_FENCE_GATE;
 	}
 
-	public static function BROWN_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mBROWN_WOOL_WALL)){ self::init(); }
+	public static function BROWN_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mBROWN_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mBROWN_WOOL_WALL;
 	}
 
-	public static function BUDDING_AMETHYST_SLAB() : Slab{
-		if(!isset(self::$_mBUDDING_AMETHYST_SLAB)){ self::init(); }
+	public static function BUDDING_AMETHYST_SLAB() : Slab
+	{
+		if (!isset(self::$_mBUDDING_AMETHYST_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mBUDDING_AMETHYST_SLAB;
 	}
 
-	public static function BUDDING_AMETHYST_STAIRS() : Stair{
-		if(!isset(self::$_mBUDDING_AMETHYST_STAIRS)){ self::init(); }
+	public static function BUDDING_AMETHYST_STAIRS() : Stair
+	{
+		if (!isset(self::$_mBUDDING_AMETHYST_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mBUDDING_AMETHYST_STAIRS;
 	}
 
-	public static function CALCITE_SLAB() : Slab{
-		if(!isset(self::$_mCALCITE_SLAB)){ self::init(); }
+	public static function CALCITE_SLAB() : Slab
+	{
+		if (!isset(self::$_mCALCITE_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mCALCITE_SLAB;
 	}
 
-	public static function CALCITE_STAIRS() : Stair{
-		if(!isset(self::$_mCALCITE_STAIRS)){ self::init(); }
+	public static function CALCITE_STAIRS() : Stair
+	{
+		if (!isset(self::$_mCALCITE_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mCALCITE_STAIRS;
 	}
 
-	public static function CALCITE_WALL() : Wall{
-		if(!isset(self::$_mCALCITE_WALL)){ self::init(); }
+	public static function CALCITE_WALL() : Wall
+	{
+		if (!isset(self::$_mCALCITE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mCALCITE_WALL;
 	}
 
-	public static function CLAY_SLAB() : ClaySlab{
-		if(!isset(self::$_mCLAY_SLAB)){ self::init(); }
+	public static function CLAY_SLAB() : ClaySlab
+	{
+		if (!isset(self::$_mCLAY_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mCLAY_SLAB;
 	}
 
-	public static function CLAY_STAIRS() : ClayStair{
-		if(!isset(self::$_mCLAY_STAIRS)){ self::init(); }
+	public static function CLAY_STAIRS() : ClayStair
+	{
+		if (!isset(self::$_mCLAY_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mCLAY_STAIRS;
 	}
 
-	public static function COARSE_DIRT_SLAB() : Slab{
-		if(!isset(self::$_mCOARSE_DIRT_SLAB)){ self::init(); }
+	public static function COARSE_DIRT_SLAB() : Slab
+	{
+		if (!isset(self::$_mCOARSE_DIRT_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mCOARSE_DIRT_SLAB;
 	}
 
-	public static function COARSE_DIRT_STAIRS() : Stair{
-		if(!isset(self::$_mCOARSE_DIRT_STAIRS)){ self::init(); }
+	public static function COARSE_DIRT_STAIRS() : Stair
+	{
+		if (!isset(self::$_mCOARSE_DIRT_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mCOARSE_DIRT_STAIRS;
 	}
 
-	public static function CRIMSON_NYLIUM_SLAB() : NyliumSlab{
-		if(!isset(self::$_mCRIMSON_NYLIUM_SLAB)){ self::init(); }
+	public static function CRIMSON_NYLIUM_SLAB() : NyliumSlab
+	{
+		if (!isset(self::$_mCRIMSON_NYLIUM_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mCRIMSON_NYLIUM_SLAB;
 	}
 
-	public static function CRIMSON_NYLIUM_STAIRS() : NyliumStair{
-		if(!isset(self::$_mCRIMSON_NYLIUM_STAIRS)){ self::init(); }
+	public static function CRIMSON_NYLIUM_STAIRS() : NyliumStair
+	{
+		if (!isset(self::$_mCRIMSON_NYLIUM_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mCRIMSON_NYLIUM_STAIRS;
 	}
 
-	public static function CYAN_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mCYAN_CONCRETE_FENCE)){ self::init(); }
+	public static function CYAN_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mCYAN_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_CONCRETE_FENCE;
 	}
 
-	public static function CYAN_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mCYAN_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function CYAN_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mCYAN_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_CONCRETE_FENCE_GATE;
 	}
 
-	public static function CYAN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mCYAN_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function CYAN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mCYAN_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function CYAN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mCYAN_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function CYAN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mCYAN_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function CYAN_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mCYAN_CONCRETE_WALL)){ self::init(); }
+	public static function CYAN_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mCYAN_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_CONCRETE_WALL;
 	}
 
-	public static function CYAN_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mCYAN_WOOL_FENCE)){ self::init(); }
+	public static function CYAN_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mCYAN_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_WOOL_FENCE;
 	}
 
-	public static function CYAN_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mCYAN_WOOL_FENCE_GATE)){ self::init(); }
+	public static function CYAN_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mCYAN_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_WOOL_FENCE_GATE;
 	}
 
-	public static function CYAN_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mCYAN_WOOL_WALL)){ self::init(); }
+	public static function CYAN_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mCYAN_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mCYAN_WOOL_WALL;
 	}
 
-	public static function DIRT_PATH_SLAB() : DirtPathSlab{
-		if(!isset(self::$_mDIRT_PATH_SLAB)){ self::init(); }
+	public static function DIRT_PATH_SLAB() : DirtPathSlab
+	{
+		if (!isset(self::$_mDIRT_PATH_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_PATH_SLAB;
 	}
 
-	public static function DIRT_PATH_STAIRS() : DirtPathStair{
-		if(!isset(self::$_mDIRT_PATH_STAIRS)){ self::init(); }
+	public static function DIRT_PATH_STAIRS() : DirtPathStair
+	{
+		if (!isset(self::$_mDIRT_PATH_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_PATH_STAIRS;
 	}
 
-	public static function DIRT_SLAB() : DirtSlab{
-		if(!isset(self::$_mDIRT_SLAB)){ self::init(); }
+	public static function DIRT_SLAB() : DirtSlab
+	{
+		if (!isset(self::$_mDIRT_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_SLAB;
 	}
 
-	public static function DIRT_STAIRS() : DirtStair{
-		if(!isset(self::$_mDIRT_STAIRS)){ self::init(); }
+	public static function DIRT_STAIRS() : DirtStair
+	{
+		if (!isset(self::$_mDIRT_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_STAIRS;
 	}
 
-	public static function DIRT_WITH_ROOTS_SLAB() : Slab{
-		if(!isset(self::$_mDIRT_WITH_ROOTS_SLAB)){ self::init(); }
+	public static function DIRT_WITH_ROOTS_SLAB() : Slab
+	{
+		if (!isset(self::$_mDIRT_WITH_ROOTS_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_WITH_ROOTS_SLAB;
 	}
 
-	public static function DIRT_WITH_ROOTS_STAIRS() : Stair{
-		if(!isset(self::$_mDIRT_WITH_ROOTS_STAIRS)){ self::init(); }
+	public static function DIRT_WITH_ROOTS_STAIRS() : Stair
+	{
+		if (!isset(self::$_mDIRT_WITH_ROOTS_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mDIRT_WITH_ROOTS_STAIRS;
 	}
 
-	public static function DRIPSTONE_SLAB() : Slab{
-		if(!isset(self::$_mDRIPSTONE_SLAB)){ self::init(); }
+	public static function DRIPSTONE_SLAB() : Slab
+	{
+		if (!isset(self::$_mDRIPSTONE_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mDRIPSTONE_SLAB;
 	}
 
-	public static function DRIPSTONE_STAIRS() : Stair{
-		if(!isset(self::$_mDRIPSTONE_STAIRS)){ self::init(); }
+	public static function DRIPSTONE_STAIRS() : Stair
+	{
+		if (!isset(self::$_mDRIPSTONE_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mDRIPSTONE_STAIRS;
 	}
 
-	public static function DRIPSTONE_WALL() : Wall{
-		if(!isset(self::$_mDRIPSTONE_WALL)){ self::init(); }
+	public static function DRIPSTONE_WALL() : Wall
+	{
+		if (!isset(self::$_mDRIPSTONE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mDRIPSTONE_WALL;
 	}
 
-	public static function END_STONE_SLAB() : Slab{
-		if(!isset(self::$_mEND_STONE_SLAB)){ self::init(); }
+	public static function END_STONE_SLAB() : Slab
+	{
+		if (!isset(self::$_mEND_STONE_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mEND_STONE_SLAB;
 	}
 
-	public static function END_STONE_STAIRS() : Stair{
-		if(!isset(self::$_mEND_STONE_STAIRS)){ self::init(); }
+	public static function END_STONE_STAIRS() : Stair
+	{
+		if (!isset(self::$_mEND_STONE_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mEND_STONE_STAIRS;
 	}
 
-	public static function END_STONE_WALL() : Wall{
-		if(!isset(self::$_mEND_STONE_WALL)){ self::init(); }
+	public static function END_STONE_WALL() : Wall
+	{
+		if (!isset(self::$_mEND_STONE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mEND_STONE_WALL;
 	}
 
-	public static function GRASS_SLAB() : GrassSlab{
-		if(!isset(self::$_mGRASS_SLAB)){ self::init(); }
+	public static function GRASS_SLAB() : GrassSlab
+	{
+		if (!isset(self::$_mGRASS_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mGRASS_SLAB;
 	}
 
-	public static function GRASS_STAIRS() : GrassStair{
-		if(!isset(self::$_mGRASS_STAIRS)){ self::init(); }
+	public static function GRASS_STAIRS() : GrassStair
+	{
+		if (!isset(self::$_mGRASS_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mGRASS_STAIRS;
 	}
 
-	public static function GRAVEL_SLAB() : GravelSlab{
-		if(!isset(self::$_mGRAVEL_SLAB)){ self::init(); }
+	public static function GRAVEL_SLAB() : GravelSlab
+	{
+		if (!isset(self::$_mGRAVEL_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mGRAVEL_SLAB;
 	}
 
-	public static function GRAVEL_STAIRS() : GravelStair{
-		if(!isset(self::$_mGRAVEL_STAIRS)){ self::init(); }
+	public static function GRAVEL_STAIRS() : GravelStair
+	{
+		if (!isset(self::$_mGRAVEL_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mGRAVEL_STAIRS;
 	}
 
-	public static function GRAY_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mGRAY_CONCRETE_FENCE)){ self::init(); }
+	public static function GRAY_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mGRAY_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_CONCRETE_FENCE;
 	}
 
-	public static function GRAY_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mGRAY_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function GRAY_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mGRAY_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_CONCRETE_FENCE_GATE;
 	}
 
-	public static function GRAY_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mGRAY_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function GRAY_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mGRAY_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function GRAY_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mGRAY_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function GRAY_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mGRAY_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function GRAY_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mGRAY_CONCRETE_WALL)){ self::init(); }
+	public static function GRAY_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mGRAY_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_CONCRETE_WALL;
 	}
 
-	public static function GRAY_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mGRAY_WOOL_FENCE)){ self::init(); }
+	public static function GRAY_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mGRAY_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_WOOL_FENCE;
 	}
 
-	public static function GRAY_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mGRAY_WOOL_FENCE_GATE)){ self::init(); }
+	public static function GRAY_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mGRAY_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_WOOL_FENCE_GATE;
 	}
 
-	public static function GRAY_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mGRAY_WOOL_WALL)){ self::init(); }
+	public static function GRAY_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mGRAY_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mGRAY_WOOL_WALL;
 	}
 
-	public static function GREEN_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mGREEN_CONCRETE_FENCE)){ self::init(); }
+	public static function GREEN_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mGREEN_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_CONCRETE_FENCE;
 	}
 
-	public static function GREEN_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mGREEN_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function GREEN_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mGREEN_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_CONCRETE_FENCE_GATE;
 	}
 
-	public static function GREEN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mGREEN_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function GREEN_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mGREEN_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function GREEN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mGREEN_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function GREEN_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mGREEN_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function GREEN_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mGREEN_CONCRETE_WALL)){ self::init(); }
+	public static function GREEN_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mGREEN_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_CONCRETE_WALL;
 	}
 
-	public static function GREEN_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mGREEN_WOOL_FENCE)){ self::init(); }
+	public static function GREEN_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mGREEN_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_WOOL_FENCE;
 	}
 
-	public static function GREEN_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mGREEN_WOOL_FENCE_GATE)){ self::init(); }
+	public static function GREEN_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mGREEN_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_WOOL_FENCE_GATE;
 	}
 
-	public static function GREEN_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mGREEN_WOOL_WALL)){ self::init(); }
+	public static function GREEN_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mGREEN_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mGREEN_WOOL_WALL;
 	}
 
-	public static function LIGHT_BLUE_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mLIGHT_BLUE_CONCRETE_FENCE)){ self::init(); }
+	public static function LIGHT_BLUE_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mLIGHT_BLUE_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_CONCRETE_FENCE;
 	}
 
-	public static function LIGHT_BLUE_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mLIGHT_BLUE_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function LIGHT_BLUE_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mLIGHT_BLUE_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_CONCRETE_FENCE_GATE;
 	}
 
-	public static function LIGHT_BLUE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mLIGHT_BLUE_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function LIGHT_BLUE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mLIGHT_BLUE_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function LIGHT_BLUE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mLIGHT_BLUE_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function LIGHT_BLUE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mLIGHT_BLUE_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function LIGHT_BLUE_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mLIGHT_BLUE_CONCRETE_WALL)){ self::init(); }
+	public static function LIGHT_BLUE_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mLIGHT_BLUE_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_CONCRETE_WALL;
 	}
 
-	public static function LIGHT_BLUE_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mLIGHT_BLUE_WOOL_FENCE)){ self::init(); }
+	public static function LIGHT_BLUE_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mLIGHT_BLUE_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_WOOL_FENCE;
 	}
 
-	public static function LIGHT_BLUE_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mLIGHT_BLUE_WOOL_FENCE_GATE)){ self::init(); }
+	public static function LIGHT_BLUE_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mLIGHT_BLUE_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_WOOL_FENCE_GATE;
 	}
 
-	public static function LIGHT_BLUE_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mLIGHT_BLUE_WOOL_WALL)){ self::init(); }
+	public static function LIGHT_BLUE_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mLIGHT_BLUE_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_BLUE_WOOL_WALL;
 	}
 
-	public static function LIGHT_GRAY_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mLIGHT_GRAY_CONCRETE_FENCE)){ self::init(); }
+	public static function LIGHT_GRAY_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mLIGHT_GRAY_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_CONCRETE_FENCE;
 	}
 
-	public static function LIGHT_GRAY_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mLIGHT_GRAY_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function LIGHT_GRAY_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mLIGHT_GRAY_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_CONCRETE_FENCE_GATE;
 	}
 
-	public static function LIGHT_GRAY_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mLIGHT_GRAY_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function LIGHT_GRAY_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mLIGHT_GRAY_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function LIGHT_GRAY_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mLIGHT_GRAY_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function LIGHT_GRAY_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mLIGHT_GRAY_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function LIGHT_GRAY_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mLIGHT_GRAY_CONCRETE_WALL)){ self::init(); }
+	public static function LIGHT_GRAY_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mLIGHT_GRAY_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_CONCRETE_WALL;
 	}
 
-	public static function LIGHT_GRAY_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mLIGHT_GRAY_WOOL_FENCE)){ self::init(); }
+	public static function LIGHT_GRAY_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mLIGHT_GRAY_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_WOOL_FENCE;
 	}
 
-	public static function LIGHT_GRAY_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mLIGHT_GRAY_WOOL_FENCE_GATE)){ self::init(); }
+	public static function LIGHT_GRAY_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mLIGHT_GRAY_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_WOOL_FENCE_GATE;
 	}
 
-	public static function LIGHT_GRAY_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mLIGHT_GRAY_WOOL_WALL)){ self::init(); }
+	public static function LIGHT_GRAY_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mLIGHT_GRAY_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIGHT_GRAY_WOOL_WALL;
 	}
 
-	public static function LIME_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mLIME_CONCRETE_FENCE)){ self::init(); }
+	public static function LIME_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mLIME_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIME_CONCRETE_FENCE;
 	}
 
-	public static function LIME_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mLIME_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function LIME_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mLIME_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIME_CONCRETE_FENCE_GATE;
 	}
 
-	public static function LIME_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mLIME_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function LIME_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mLIME_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mLIME_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function LIME_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mLIME_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function LIME_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mLIME_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mLIME_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function LIME_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mLIME_CONCRETE_WALL)){ self::init(); }
+	public static function LIME_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mLIME_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIME_CONCRETE_WALL;
 	}
 
-	public static function LIME_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mLIME_WOOL_FENCE)){ self::init(); }
+	public static function LIME_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mLIME_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mLIME_WOOL_FENCE;
 	}
 
-	public static function LIME_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mLIME_WOOL_FENCE_GATE)){ self::init(); }
+	public static function LIME_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mLIME_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mLIME_WOOL_FENCE_GATE;
 	}
 
-	public static function LIME_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mLIME_WOOL_WALL)){ self::init(); }
+	public static function LIME_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mLIME_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mLIME_WOOL_WALL;
 	}
 
-	public static function MAGENTA_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mMAGENTA_CONCRETE_FENCE)){ self::init(); }
+	public static function MAGENTA_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mMAGENTA_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_CONCRETE_FENCE;
 	}
 
-	public static function MAGENTA_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mMAGENTA_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function MAGENTA_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mMAGENTA_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_CONCRETE_FENCE_GATE;
 	}
 
-	public static function MAGENTA_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mMAGENTA_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function MAGENTA_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mMAGENTA_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function MAGENTA_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mMAGENTA_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function MAGENTA_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mMAGENTA_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function MAGENTA_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mMAGENTA_CONCRETE_WALL)){ self::init(); }
+	public static function MAGENTA_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mMAGENTA_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_CONCRETE_WALL;
 	}
 
-	public static function MAGENTA_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mMAGENTA_WOOL_FENCE)){ self::init(); }
+	public static function MAGENTA_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mMAGENTA_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_WOOL_FENCE;
 	}
 
-	public static function MAGENTA_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mMAGENTA_WOOL_FENCE_GATE)){ self::init(); }
+	public static function MAGENTA_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mMAGENTA_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_WOOL_FENCE_GATE;
 	}
 
-	public static function MAGENTA_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mMAGENTA_WOOL_WALL)){ self::init(); }
+	public static function MAGENTA_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mMAGENTA_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mMAGENTA_WOOL_WALL;
 	}
 
-	public static function MOSS_SLAB() : Slab{
-		if(!isset(self::$_mMOSS_SLAB)){ self::init(); }
+	public static function MOSS_SLAB() : Slab
+	{
+		if (!isset(self::$_mMOSS_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mMOSS_SLAB;
 	}
 
-	public static function MOSS_STAIRS() : Stair{
-		if(!isset(self::$_mMOSS_STAIRS)){ self::init(); }
+	public static function MOSS_STAIRS() : Stair
+	{
+		if (!isset(self::$_mMOSS_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mMOSS_STAIRS;
 	}
 
-	public static function MUD_SLAB() : Slab{
-		if(!isset(self::$_mMUD_SLAB)){ self::init(); }
+	public static function MUD_SLAB() : Slab
+	{
+		if (!isset(self::$_mMUD_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mMUD_SLAB;
 	}
 
-	public static function MUD_STAIRS() : Stair{
-		if(!isset(self::$_mMUD_STAIRS)){ self::init(); }
+	public static function MUD_STAIRS() : Stair
+	{
+		if (!isset(self::$_mMUD_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mMUD_STAIRS;
 	}
 
-	public static function MYCELIUM_SLAB() : MyceliumSlab{
-		if(!isset(self::$_mMYCELIUM_SLAB)){ self::init(); }
+	public static function MYCELIUM_SLAB() : MyceliumSlab
+	{
+		if (!isset(self::$_mMYCELIUM_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mMYCELIUM_SLAB;
 	}
 
-	public static function MYCELIUM_STAIRS() : MyceliumStair{
-		if(!isset(self::$_mMYCELIUM_STAIRS)){ self::init(); }
+	public static function MYCELIUM_STAIRS() : MyceliumStair
+	{
+		if (!isset(self::$_mMYCELIUM_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mMYCELIUM_STAIRS;
 	}
 
-	public static function NETHERRACK_SLAB() : NetherrackSlab{
-		if(!isset(self::$_mNETHERRACK_SLAB)){ self::init(); }
+	public static function NETHERRACK_SLAB() : NetherrackSlab
+	{
+		if (!isset(self::$_mNETHERRACK_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mNETHERRACK_SLAB;
 	}
 
-	public static function NETHERRACK_STAIRS() : NetherrackStair{
-		if(!isset(self::$_mNETHERRACK_STAIRS)){ self::init(); }
+	public static function NETHERRACK_STAIRS() : NetherrackStair
+	{
+		if (!isset(self::$_mNETHERRACK_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mNETHERRACK_STAIRS;
 	}
 
-	public static function NETHERRACK_WALL() : NetherrackWall{
-		if(!isset(self::$_mNETHERRACK_WALL)){ self::init(); }
+	public static function NETHERRACK_WALL() : NetherrackWall
+	{
+		if (!isset(self::$_mNETHERRACK_WALL)) {
+			self::init();
+		}
 		return clone self::$_mNETHERRACK_WALL;
 	}
 
-	public static function NETHER_WART_FENCE() : NexlyFence{
-		if(!isset(self::$_mNETHER_WART_FENCE)){ self::init(); }
+	public static function NETHER_WART_FENCE() : NexlyFence
+	{
+		if (!isset(self::$_mNETHER_WART_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mNETHER_WART_FENCE;
 	}
 
-	public static function NETHER_WART_FENCE_GATE() : FenceGate{
-		if(!isset(self::$_mNETHER_WART_FENCE_GATE)){ self::init(); }
+	public static function NETHER_WART_FENCE_GATE() : FenceGate
+	{
+		if (!isset(self::$_mNETHER_WART_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mNETHER_WART_FENCE_GATE;
 	}
 
-	public static function NETHER_WART_SLAB() : Slab{
-		if(!isset(self::$_mNETHER_WART_SLAB)){ self::init(); }
+	public static function NETHER_WART_SLAB() : Slab
+	{
+		if (!isset(self::$_mNETHER_WART_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mNETHER_WART_SLAB;
 	}
 
-	public static function NETHER_WART_STAIRS() : Stair{
-		if(!isset(self::$_mNETHER_WART_STAIRS)){ self::init(); }
+	public static function NETHER_WART_STAIRS() : Stair
+	{
+		if (!isset(self::$_mNETHER_WART_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mNETHER_WART_STAIRS;
 	}
 
-	public static function OBSIDIAN_FENCE() : NexlyFence{
-		if(!isset(self::$_mOBSIDIAN_FENCE)){ self::init(); }
+	public static function OBSIDIAN_FENCE() : NexlyFence
+	{
+		if (!isset(self::$_mOBSIDIAN_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mOBSIDIAN_FENCE;
 	}
 
-	public static function OBSIDIAN_FENCE_GATE() : FenceGate{
-		if(!isset(self::$_mOBSIDIAN_FENCE_GATE)){ self::init(); }
+	public static function OBSIDIAN_FENCE_GATE() : FenceGate
+	{
+		if (!isset(self::$_mOBSIDIAN_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mOBSIDIAN_FENCE_GATE;
 	}
 
-	public static function OBSIDIAN_SLAB() : Slab{
-		if(!isset(self::$_mOBSIDIAN_SLAB)){ self::init(); }
+	public static function OBSIDIAN_SLAB() : Slab
+	{
+		if (!isset(self::$_mOBSIDIAN_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mOBSIDIAN_SLAB;
 	}
 
-	public static function OBSIDIAN_STAIRS() : Stair{
-		if(!isset(self::$_mOBSIDIAN_STAIRS)){ self::init(); }
+	public static function OBSIDIAN_STAIRS() : Stair
+	{
+		if (!isset(self::$_mOBSIDIAN_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mOBSIDIAN_STAIRS;
 	}
 
-	public static function ORANGE_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mORANGE_CONCRETE_FENCE)){ self::init(); }
+	public static function ORANGE_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mORANGE_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_CONCRETE_FENCE;
 	}
 
-	public static function ORANGE_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mORANGE_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function ORANGE_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mORANGE_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_CONCRETE_FENCE_GATE;
 	}
 
-	public static function ORANGE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mORANGE_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function ORANGE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mORANGE_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function ORANGE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mORANGE_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function ORANGE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mORANGE_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function ORANGE_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mORANGE_CONCRETE_WALL)){ self::init(); }
+	public static function ORANGE_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mORANGE_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_CONCRETE_WALL;
 	}
 
-	public static function ORANGE_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mORANGE_WOOL_FENCE)){ self::init(); }
+	public static function ORANGE_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mORANGE_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_WOOL_FENCE;
 	}
 
-	public static function ORANGE_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mORANGE_WOOL_FENCE_GATE)){ self::init(); }
+	public static function ORANGE_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mORANGE_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_WOOL_FENCE_GATE;
 	}
 
-	public static function ORANGE_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mORANGE_WOOL_WALL)){ self::init(); }
+	public static function ORANGE_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mORANGE_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mORANGE_WOOL_WALL;
 	}
 
-	public static function PACKED_ICE_SLAB() : Slab{
-		if(!isset(self::$_mPACKED_ICE_SLAB)){ self::init(); }
+	public static function PACKED_ICE_SLAB() : Slab
+	{
+		if (!isset(self::$_mPACKED_ICE_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_ICE_SLAB;
 	}
 
-	public static function PACKED_ICE_STAIRS() : Stair{
-		if(!isset(self::$_mPACKED_ICE_STAIRS)){ self::init(); }
+	public static function PACKED_ICE_STAIRS() : Stair
+	{
+		if (!isset(self::$_mPACKED_ICE_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_ICE_STAIRS;
 	}
 
-	public static function PACKED_MUD_FENCE() : NexlyFence{
-		if(!isset(self::$_mPACKED_MUD_FENCE)){ self::init(); }
+	public static function PACKED_MUD_FENCE() : NexlyFence
+	{
+		if (!isset(self::$_mPACKED_MUD_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_MUD_FENCE;
 	}
 
-	public static function PACKED_MUD_FENCE_GATE() : FenceGate{
-		if(!isset(self::$_mPACKED_MUD_FENCE_GATE)){ self::init(); }
+	public static function PACKED_MUD_FENCE_GATE() : FenceGate
+	{
+		if (!isset(self::$_mPACKED_MUD_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_MUD_FENCE_GATE;
 	}
 
-	public static function PACKED_MUD_SLAB() : Slab{
-		if(!isset(self::$_mPACKED_MUD_SLAB)){ self::init(); }
+	public static function PACKED_MUD_SLAB() : Slab
+	{
+		if (!isset(self::$_mPACKED_MUD_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_MUD_SLAB;
 	}
 
-	public static function PACKED_MUD_STAIRS() : Stair{
-		if(!isset(self::$_mPACKED_MUD_STAIRS)){ self::init(); }
+	public static function PACKED_MUD_STAIRS() : Stair
+	{
+		if (!isset(self::$_mPACKED_MUD_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPACKED_MUD_STAIRS;
 	}
 
-	public static function PALE_MOSS_SLAB() : Slab{
-		if(!isset(self::$_mPALE_MOSS_SLAB)){ self::init(); }
+	public static function PALE_MOSS_SLAB() : Slab
+	{
+		if (!isset(self::$_mPALE_MOSS_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPALE_MOSS_SLAB;
 	}
 
-	public static function PALE_MOSS_STAIRS() : Stair{
-		if(!isset(self::$_mPALE_MOSS_STAIRS)){ self::init(); }
+	public static function PALE_MOSS_STAIRS() : Stair
+	{
+		if (!isset(self::$_mPALE_MOSS_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPALE_MOSS_STAIRS;
 	}
 
-	public static function PINK_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mPINK_CONCRETE_FENCE)){ self::init(); }
+	public static function PINK_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mPINK_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mPINK_CONCRETE_FENCE;
 	}
 
-	public static function PINK_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mPINK_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function PINK_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mPINK_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mPINK_CONCRETE_FENCE_GATE;
 	}
 
-	public static function PINK_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mPINK_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function PINK_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mPINK_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPINK_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function PINK_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mPINK_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function PINK_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mPINK_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPINK_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function PINK_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mPINK_CONCRETE_WALL)){ self::init(); }
+	public static function PINK_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mPINK_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mPINK_CONCRETE_WALL;
 	}
 
-	public static function PINK_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mPINK_WOOL_FENCE)){ self::init(); }
+	public static function PINK_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mPINK_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mPINK_WOOL_FENCE;
 	}
 
-	public static function PINK_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mPINK_WOOL_FENCE_GATE)){ self::init(); }
+	public static function PINK_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mPINK_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mPINK_WOOL_FENCE_GATE;
 	}
 
-	public static function PINK_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mPINK_WOOL_WALL)){ self::init(); }
+	public static function PINK_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mPINK_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mPINK_WOOL_WALL;
 	}
 
-	public static function PODZOL_SLAB() : PodzolSlab{
-		if(!isset(self::$_mPODZOL_SLAB)){ self::init(); }
+	public static function PODZOL_SLAB() : PodzolSlab
+	{
+		if (!isset(self::$_mPODZOL_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPODZOL_SLAB;
 	}
 
-	public static function PODZOL_STAIRS() : PodzolStair{
-		if(!isset(self::$_mPODZOL_STAIRS)){ self::init(); }
+	public static function PODZOL_STAIRS() : PodzolStair
+	{
+		if (!isset(self::$_mPODZOL_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPODZOL_STAIRS;
 	}
 
-	public static function PURPLE_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mPURPLE_CONCRETE_FENCE)){ self::init(); }
+	public static function PURPLE_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mPURPLE_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_CONCRETE_FENCE;
 	}
 
-	public static function PURPLE_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mPURPLE_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function PURPLE_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mPURPLE_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_CONCRETE_FENCE_GATE;
 	}
 
-	public static function PURPLE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mPURPLE_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function PURPLE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mPURPLE_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function PURPLE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mPURPLE_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function PURPLE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mPURPLE_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function PURPLE_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mPURPLE_CONCRETE_WALL)){ self::init(); }
+	public static function PURPLE_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mPURPLE_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_CONCRETE_WALL;
 	}
 
-	public static function PURPLE_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mPURPLE_WOOL_FENCE)){ self::init(); }
+	public static function PURPLE_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mPURPLE_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_WOOL_FENCE;
 	}
 
-	public static function PURPLE_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mPURPLE_WOOL_FENCE_GATE)){ self::init(); }
+	public static function PURPLE_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mPURPLE_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_WOOL_FENCE_GATE;
 	}
 
-	public static function PURPLE_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mPURPLE_WOOL_WALL)){ self::init(); }
+	public static function PURPLE_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mPURPLE_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mPURPLE_WOOL_WALL;
 	}
 
-	public static function RED_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mRED_CONCRETE_FENCE)){ self::init(); }
+	public static function RED_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mRED_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mRED_CONCRETE_FENCE;
 	}
 
-	public static function RED_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mRED_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function RED_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mRED_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mRED_CONCRETE_FENCE_GATE;
 	}
 
-	public static function RED_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mRED_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function RED_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mRED_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mRED_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function RED_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mRED_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function RED_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mRED_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mRED_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function RED_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mRED_CONCRETE_WALL)){ self::init(); }
+	public static function RED_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mRED_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mRED_CONCRETE_WALL;
 	}
 
-	public static function RED_SAND_SLAB() : FallableSlab{
-		if(!isset(self::$_mRED_SAND_SLAB)){ self::init(); }
+	public static function RED_SAND_SLAB() : FallableSlab
+	{
+		if (!isset(self::$_mRED_SAND_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mRED_SAND_SLAB;
 	}
 
-	public static function RED_SAND_STAIRS() : FallableStair{
-		if(!isset(self::$_mRED_SAND_STAIRS)){ self::init(); }
+	public static function RED_SAND_STAIRS() : FallableStair
+	{
+		if (!isset(self::$_mRED_SAND_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mRED_SAND_STAIRS;
 	}
 
-	public static function RED_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mRED_WOOL_FENCE)){ self::init(); }
+	public static function RED_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mRED_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mRED_WOOL_FENCE;
 	}
 
-	public static function RED_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mRED_WOOL_FENCE_GATE)){ self::init(); }
+	public static function RED_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mRED_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mRED_WOOL_FENCE_GATE;
 	}
 
-	public static function RED_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mRED_WOOL_WALL)){ self::init(); }
+	public static function RED_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mRED_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mRED_WOOL_WALL;
 	}
 
-	public static function SAND_SLAB() : FallableSlab{
-		if(!isset(self::$_mSAND_SLAB)){ self::init(); }
+	public static function SAND_SLAB() : FallableSlab
+	{
+		if (!isset(self::$_mSAND_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mSAND_SLAB;
 	}
 
-	public static function SAND_STAIRS() : FallableStair{
-		if(!isset(self::$_mSAND_STAIRS)){ self::init(); }
+	public static function SAND_STAIRS() : FallableStair
+	{
+		if (!isset(self::$_mSAND_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mSAND_STAIRS;
 	}
 
-	public static function SNOW_SLAB() : Slab{
-		if(!isset(self::$_mSNOW_SLAB)){ self::init(); }
+	public static function SNOW_SLAB() : Slab
+	{
+		if (!isset(self::$_mSNOW_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mSNOW_SLAB;
 	}
 
-	public static function SNOW_STAIRS() : Stair{
-		if(!isset(self::$_mSNOW_STAIRS)){ self::init(); }
+	public static function SNOW_STAIRS() : Stair
+	{
+		if (!isset(self::$_mSNOW_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mSNOW_STAIRS;
 	}
 
-	public static function SOUL_SOIL_SLAB() : SoulSoilSlab{
-		if(!isset(self::$_mSOUL_SOIL_SLAB)){ self::init(); }
+	public static function SOUL_SOIL_SLAB() : SoulSoilSlab
+	{
+		if (!isset(self::$_mSOUL_SOIL_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mSOUL_SOIL_SLAB;
 	}
 
-	public static function SOUL_SOIL_STAIRS() : SoulSoilStair{
-		if(!isset(self::$_mSOUL_SOIL_STAIRS)){ self::init(); }
+	public static function SOUL_SOIL_STAIRS() : SoulSoilStair
+	{
+		if (!isset(self::$_mSOUL_SOIL_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mSOUL_SOIL_STAIRS;
 	}
 
-	public static function SUSPICIOUS_GRAVEL_SLAB() : GravelSlab{
-		if(!isset(self::$_mSUSPICIOUS_GRAVEL_SLAB)){ self::init(); }
+	public static function SUSPICIOUS_GRAVEL_SLAB() : GravelSlab
+	{
+		if (!isset(self::$_mSUSPICIOUS_GRAVEL_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mSUSPICIOUS_GRAVEL_SLAB;
 	}
 
-	public static function SUSPICIOUS_GRAVEL_STAIRS() : GravelStair{
-		if(!isset(self::$_mSUSPICIOUS_GRAVEL_STAIRS)){ self::init(); }
+	public static function SUSPICIOUS_GRAVEL_STAIRS() : GravelStair
+	{
+		if (!isset(self::$_mSUSPICIOUS_GRAVEL_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mSUSPICIOUS_GRAVEL_STAIRS;
 	}
 
-	public static function SUSPICIOUS_SAND_SLAB() : FallableSlab{
-		if(!isset(self::$_mSUSPICIOUS_SAND_SLAB)){ self::init(); }
+	public static function SUSPICIOUS_SAND_SLAB() : FallableSlab
+	{
+		if (!isset(self::$_mSUSPICIOUS_SAND_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mSUSPICIOUS_SAND_SLAB;
 	}
 
-	public static function SUSPICIOUS_SAND_STAIRS() : FallableStair{
-		if(!isset(self::$_mSUSPICIOUS_SAND_STAIRS)){ self::init(); }
+	public static function SUSPICIOUS_SAND_STAIRS() : FallableStair
+	{
+		if (!isset(self::$_mSUSPICIOUS_SAND_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mSUSPICIOUS_SAND_STAIRS;
 	}
 
-	public static function WARPED_NYLIUM_SLAB() : NyliumSlab{
-		if(!isset(self::$_mWARPED_NYLIUM_SLAB)){ self::init(); }
+	public static function WARPED_NYLIUM_SLAB() : NyliumSlab
+	{
+		if (!isset(self::$_mWARPED_NYLIUM_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_NYLIUM_SLAB;
 	}
 
-	public static function WARPED_NYLIUM_STAIRS() : NyliumStair{
-		if(!isset(self::$_mWARPED_NYLIUM_STAIRS)){ self::init(); }
+	public static function WARPED_NYLIUM_STAIRS() : NyliumStair
+	{
+		if (!isset(self::$_mWARPED_NYLIUM_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_NYLIUM_STAIRS;
 	}
 
-	public static function WARPED_WART_FENCE() : NexlyFence{
-		if(!isset(self::$_mWARPED_WART_FENCE)){ self::init(); }
+	public static function WARPED_WART_FENCE() : NexlyFence
+	{
+		if (!isset(self::$_mWARPED_WART_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_WART_FENCE;
 	}
 
-	public static function WARPED_WART_FENCE_GATE() : FenceGate{
-		if(!isset(self::$_mWARPED_WART_FENCE_GATE)){ self::init(); }
+	public static function WARPED_WART_FENCE_GATE() : FenceGate
+	{
+		if (!isset(self::$_mWARPED_WART_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_WART_FENCE_GATE;
 	}
 
-	public static function WARPED_WART_SLAB() : Slab{
-		if(!isset(self::$_mWARPED_WART_SLAB)){ self::init(); }
+	public static function WARPED_WART_SLAB() : Slab
+	{
+		if (!isset(self::$_mWARPED_WART_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_WART_SLAB;
 	}
 
-	public static function WARPED_WART_STAIRS() : Stair{
-		if(!isset(self::$_mWARPED_WART_STAIRS)){ self::init(); }
+	public static function WARPED_WART_STAIRS() : Stair
+	{
+		if (!isset(self::$_mWARPED_WART_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mWARPED_WART_STAIRS;
 	}
 
-	public static function WHITE_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mWHITE_CONCRETE_FENCE)){ self::init(); }
+	public static function WHITE_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mWHITE_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_CONCRETE_FENCE;
 	}
 
-	public static function WHITE_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mWHITE_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function WHITE_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mWHITE_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_CONCRETE_FENCE_GATE;
 	}
 
-	public static function WHITE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mWHITE_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function WHITE_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mWHITE_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function WHITE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mWHITE_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function WHITE_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mWHITE_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function WHITE_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mWHITE_CONCRETE_WALL)){ self::init(); }
+	public static function WHITE_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mWHITE_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_CONCRETE_WALL;
 	}
 
-	public static function WHITE_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mWHITE_WOOL_FENCE)){ self::init(); }
+	public static function WHITE_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mWHITE_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_WOOL_FENCE;
 	}
 
-	public static function WHITE_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mWHITE_WOOL_FENCE_GATE)){ self::init(); }
+	public static function WHITE_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mWHITE_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_WOOL_FENCE_GATE;
 	}
 
-	public static function WHITE_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mWHITE_WOOL_WALL)){ self::init(); }
+	public static function WHITE_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mWHITE_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mWHITE_WOOL_WALL;
 	}
 
-	public static function YELLOW_CONCRETE_FENCE() : ConcreteFence{
-		if(!isset(self::$_mYELLOW_CONCRETE_FENCE)){ self::init(); }
+	public static function YELLOW_CONCRETE_FENCE() : ConcreteFence
+	{
+		if (!isset(self::$_mYELLOW_CONCRETE_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_CONCRETE_FENCE;
 	}
 
-	public static function YELLOW_CONCRETE_FENCE_GATE() : ConcreteFenceGate{
-		if(!isset(self::$_mYELLOW_CONCRETE_FENCE_GATE)){ self::init(); }
+	public static function YELLOW_CONCRETE_FENCE_GATE() : ConcreteFenceGate
+	{
+		if (!isset(self::$_mYELLOW_CONCRETE_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_CONCRETE_FENCE_GATE;
 	}
 
-	public static function YELLOW_CONCRETE_POWDER_SLAB() : ConcretePowderSlab{
-		if(!isset(self::$_mYELLOW_CONCRETE_POWDER_SLAB)){ self::init(); }
+	public static function YELLOW_CONCRETE_POWDER_SLAB() : ConcretePowderSlab
+	{
+		if (!isset(self::$_mYELLOW_CONCRETE_POWDER_SLAB)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_CONCRETE_POWDER_SLAB;
 	}
 
-	public static function YELLOW_CONCRETE_POWDER_STAIRS() : ConcretePowderStair{
-		if(!isset(self::$_mYELLOW_CONCRETE_POWDER_STAIRS)){ self::init(); }
+	public static function YELLOW_CONCRETE_POWDER_STAIRS() : ConcretePowderStair
+	{
+		if (!isset(self::$_mYELLOW_CONCRETE_POWDER_STAIRS)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_CONCRETE_POWDER_STAIRS;
 	}
 
-	public static function YELLOW_CONCRETE_WALL() : ConcreteWall{
-		if(!isset(self::$_mYELLOW_CONCRETE_WALL)){ self::init(); }
+	public static function YELLOW_CONCRETE_WALL() : ConcreteWall
+	{
+		if (!isset(self::$_mYELLOW_CONCRETE_WALL)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_CONCRETE_WALL;
 	}
 
-	public static function YELLOW_WOOL_FENCE() : WoolFence{
-		if(!isset(self::$_mYELLOW_WOOL_FENCE)){ self::init(); }
+	public static function YELLOW_WOOL_FENCE() : WoolFence
+	{
+		if (!isset(self::$_mYELLOW_WOOL_FENCE)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_WOOL_FENCE;
 	}
 
-	public static function YELLOW_WOOL_FENCE_GATE() : WoolFenceGate{
-		if(!isset(self::$_mYELLOW_WOOL_FENCE_GATE)){ self::init(); }
+	public static function YELLOW_WOOL_FENCE_GATE() : WoolFenceGate
+	{
+		if (!isset(self::$_mYELLOW_WOOL_FENCE_GATE)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_WOOL_FENCE_GATE;
 	}
 
-	public static function YELLOW_WOOL_WALL() : WoolWall{
-		if(!isset(self::$_mYELLOW_WOOL_WALL)){ self::init(); }
+	public static function YELLOW_WOOL_WALL() : WoolWall
+	{
+		if (!isset(self::$_mYELLOW_WOOL_WALL)) {
+			self::init();
+		}
 		return clone self::$_mYELLOW_WOOL_WALL;
 	}
 }

@@ -46,27 +46,45 @@ use pocketmine\math\Facing;
 #[UseDefaultVisual(NexlyGeometry::SLAB . '_carried')]
 class DirtPathSlab extends Slab
 {
-	public function getSupportType(int $facing) : SupportType{
-		return match($facing){
+	/**
+	 * @param int $facing
+	 * @return SupportType
+	 */
+	public function getSupportType(int $facing) : SupportType
+	{
+		return match ($facing) {
 			Facing::UP => SupportType::EDGE,
 			Facing::DOWN => SupportType::FULL,
 			default => SupportType::NONE,
 		};
 	}
 
-	public function onNearbyBlockChange() : void{
-		if($this->getSide(Facing::UP)->isSolid()){
+	/**
+	 * @return void
+	 */
+	public function onNearbyBlockChange() : void
+	{
+		if ($this->getSide(Facing::UP)->isSolid()) {
 			$this->position->getWorld()->setBlock($this->position, LazuliBlocks::DIRT_PATH_SLAB()->setSlabType($this->getSlabType()));
 		}
 	}
 
-	public function getDropsForCompatibleTool(Item $item) : array{
+	/**
+	 * @param Item $item
+	 * @return list<Item>
+	 */
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			VanillaBlocks::DIRT()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	/**
+	 * @return bool
+	 */
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 }

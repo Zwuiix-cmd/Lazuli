@@ -36,11 +36,13 @@ class WoolFenceGate extends FenceGate implements Colored
 {
 	use ColoredTrait;
 
-	public function getFlameEncouragement() : int{
+	public function getFlameEncouragement() : int
+	{
 		return 30;
 	}
 
-	public function getFlammability() : int{
+	public function getFlammability() : int
+	{
 		return 60;
 	}
 }

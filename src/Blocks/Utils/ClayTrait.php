@@ -29,14 +29,17 @@ namespace Lazuli\Blocks\Utils;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 
-trait ClayTrait{
-	public function getDropsForCompatibleTool(Item $item) : array{
+trait ClayTrait
+{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			VanillaItems::CLAY()->setCount(4)
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 }

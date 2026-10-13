@@ -41,5 +41,4 @@ use pocketmine\block\Wall;
 #[UseDefaultVisual]
 class NetherrackWall extends Wall
 {
-
 }

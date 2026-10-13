@@ -42,14 +42,16 @@ use pocketmine\item\Item;
 #[UseDefaultVisual]
 class PodzolSlab extends Slab
 {
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 
 	/**
 	 * @return array|Item[]
 	 */
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			LazuliBlocks::PODZOL_SLAB()->asItem()
 		];

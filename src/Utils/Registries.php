@@ -53,6 +53,9 @@ class Registries
 		VanillaBlocks::getAll();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function init() : void
 	{
 		if (!self::$initialized) {
@@ -63,6 +66,9 @@ class Registries
 		LazuliBlocks::getAll();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function validate() : void
 	{
 		if (!self::$loaded) {

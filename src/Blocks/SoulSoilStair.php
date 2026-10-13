@@ -41,5 +41,4 @@ use pocketmine\block\Stair;
 #[UseDefaultVisual]
 class SoulSoilStair extends Stair
 {
-
 }

@@ -37,24 +37,28 @@ class NyliumSlab extends Slab
 	/**
 	 * @return array|Item[]
 	 */
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			LazuliBlocks::NETHERRACK_SLAB()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 
-	public function ticksRandomly() : bool{
+	public function ticksRandomly() : bool
+	{
 		return true;
 	}
 
-	public function onRandomTick() : void{
+	public function onRandomTick() : void
+	{
 		$world = $this->position->getWorld();
 		$above = $this->getSide(Facing::UP);
-		if(!$above->isTransparent()){
+		if (!$above->isTransparent()) {
 			BlockEventHelper::spread($this, LazuliBlocks::NETHERRACK_SLAB()
 				->setSlabType($this->getSlabType()), $this
 			);
@@ -62,10 +66,10 @@ class NyliumSlab extends Slab
 		}
 
 		$random = new Random();
-		for($i = 0; $i < 4; ++$i){
+		for ($i = 0; $i < 4; ++$i) {
 			$pos = $this->position->add($random->nextRange(-1, 1), $random->nextRange(-2, 0), $random->nextRange(-1, 1));
 			$block = $world->getBlock($pos);
-			if($block instanceof NetherrackSlab && $world->getBlock($pos->up())->isTransparent()){
+			if ($block instanceof NetherrackSlab && $world->getBlock($pos->up())->isTransparent()) {
 				BlockEventHelper::spread($block, clone $this
 					->setSlabType($block->getSlabType()), $this
 				);

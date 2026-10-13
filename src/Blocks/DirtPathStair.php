@@ -45,16 +45,18 @@ use pocketmine\math\Facing;
 #[UseDefaultVisual]
 class DirtPathStair extends Stair
 {
-	public function getSupportType(int $facing) : SupportType{
-		return match($facing){
+	public function getSupportType(int $facing) : SupportType
+	{
+		return match ($facing) {
 			Facing::UP => SupportType::EDGE,
 			Facing::DOWN => SupportType::FULL,
 			default => SupportType::NONE,
 		};
 	}
 
-	public function onNearbyBlockChange() : void{
-		if($this->getSide(Facing::UP)->isSolid()){
+	public function onNearbyBlockChange() : void
+	{
+		if ($this->getSide(Facing::UP)->isSolid()) {
 			$this->position->getWorld()->setBlock($this->position, LazuliBlocks::DIRT_PATH_STAIRS()
 				->setFacing($this->getFacing())
 				->setShape($this->getShape())
@@ -65,13 +67,15 @@ class DirtPathStair extends Stair
 		}
 	}
 
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			VanillaBlocks::DIRT()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 }

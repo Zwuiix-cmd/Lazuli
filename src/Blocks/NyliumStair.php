@@ -37,24 +37,28 @@ class NyliumStair extends Stair
 	/**
 	 * @return array|Item[]
 	 */
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			LazuliBlocks::NETHERRACK_STAIRS()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 
-	public function ticksRandomly() : bool{
+	public function ticksRandomly() : bool
+	{
 		return true;
 	}
 
-	public function onRandomTick() : void{
+	public function onRandomTick() : void
+	{
 		$world = $this->position->getWorld();
 		$above = $this->getSide(Facing::UP);
-		if(!$above->isTransparent()){
+		if (!$above->isTransparent()) {
 			BlockEventHelper::spread($this, LazuliBlocks::NETHERRACK_STAIRS()
 				->setFacing($this->getFacing())
 				->setShape($this->getShape())
@@ -64,10 +68,10 @@ class NyliumStair extends Stair
 		}
 
 		$random = new Random();
-		for($i = 0; $i < 4; ++$i){
+		for ($i = 0; $i < 4; ++$i) {
 			$pos = $this->position->add($random->nextRange(-1, 1), $random->nextRange(-2, 0), $random->nextRange(-1, 1));
 			$block = $world->getBlock($pos);
-			if($block instanceof NetherrackStair && $world->getBlock($pos->up())->isTransparent()){
+			if ($block instanceof NetherrackStair && $world->getBlock($pos->up())->isTransparent()) {
 				BlockEventHelper::spread($block, clone $this
 					->setFacing($block->getFacing())
 					->setShape($block->getShape())

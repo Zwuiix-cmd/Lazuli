@@ -30,6 +30,10 @@ return (new PhpCsFixer\Config)
 		'concat_space' => [
 			'spacing' => 'one'
 		],
+        'braces' => [
+            'position_after_functions_and_oop_constructs' => 'next',
+            'position_after_control_structures' => 'same',
+        ],
 		'declare_strict_types' => false,
 		'elseif' => true,
 		'fully_qualified_strict_types' => true,

@@ -75,7 +75,7 @@ use const STDERR;
  * You can see VanillaBlocksInputs (source example) and VanillaBlocks (generated example) for a look at how this works.
  */
 
-if(!isset($argv) || count($argv) !== 3){
+if (!isset($argv) || count($argv) !== 3) {
 	fwrite(STDERR, "Usage: " . __FILE__ . " <source file/folder> <destination file/folder>\n");
 	exit(1);
 }
@@ -83,7 +83,8 @@ if(!isset($argv) || count($argv) !== 3){
 /**
  * @phpstan-param RegistrySource<*> $registrySource
  */
-function generateRegistryInterface(string $namespaceName, string $sourceShortClassName, RegistrySource $registrySource, string $fileHeader) : string{
+function generateRegistryInterface(string $namespaceName, string $sourceShortClassName, RegistrySource $registrySource, string $fileHeader) : string
+{
 	$selfName = basename(__FILE__);
 	$importClasses = [
 		$namespaceName . "\\" . $sourceShortClassName => true
@@ -112,8 +113,8 @@ final class $interfaceShortClassName{
 CLASS;
 	$docCommentPrepend = "";
 	$docCommentLines = $registrySource->getTargetClassDocComment();
-	if(count($docCommentLines) > 0){
-		foreach($docCommentLines as $line){
+	if (count($docCommentLines) > 0) {
+		foreach ($docCommentLines as $line) {
 			$docCommentPrepend .= " * $line\n";
 		}
 		$docCommentPrepend .= " *\n";
@@ -125,32 +126,32 @@ CLASS;
 
 	$preprocessorReflect = (new \ReflectionFunction($registrySource::preprocessMember(...)));
 
-	if($preprocessorReflect->getClosureScopeClass()?->getName() !== RegistrySource::class){
+	if ($preprocessorReflect->getClosureScopeClass()?->getName() !== RegistrySource::class) {
 		$preprocessorFunc = $preprocessorReflect->getName();
 		$preprocessorPrefix = "$sourceShortClassName::$preprocessorFunc(";
 		$preprocessorSuffix = ")";
 		$preprocessorMapper = "array_map($sourceShortClassName::$preprocessorFunc(...), self::\$members)";
 		$importFunctions["array_map"] = true;
-	}else{
+	} else {
 		$preprocessorPrefix = "";
 		$preprocessorSuffix = "";
 		$preprocessorMapper = "self::\$members";
 	}
-	if($registrySource->cloneResults()){
+	if ($registrySource->cloneResults()) {
 		$preprocessorPrefix = "clone $preprocessorPrefix";
 		$preprocessorMapper = "Utils::cloneObjectArray($preprocessorMapper)";
 		$importClasses[Utils::class] = true;
 	}
 
 	$commonParent = null;
-	foreach(Utils::stringifyKeys($registrySource->getAllDeclarations()) as $name => $memberTypes){
-		if(count($memberTypes) === 0){
+	foreach (Utils::stringifyKeys($registrySource->getAllDeclarations()) as $name => $memberTypes) {
+		if (count($memberTypes) === 0) {
 			$typehint = "object";
 			$commonParent = false;
-		}else{
+		} else {
 			$shortTypes = [];
-			foreach($memberTypes as $memberType){
-				if(!class_exists($memberType) && !interface_exists($memberType)){
+			foreach ($memberTypes as $memberType) {
+				if (!class_exists($memberType) && !interface_exists($memberType)) {
 					throw new \LogicException("Invalid type for member \"$name\", expected only classes/interfaces, but got: $memberType");
 				}
 				$reflect = new \ReflectionClass($memberType);
@@ -160,23 +161,23 @@ CLASS;
 			$typehint = implode("&", $shortTypes);
 
 			$concreteClass = null;
-			foreach($memberTypes as $memberType){
-				if(class_exists($memberType)){
-					if($concreteClass === null){
+			foreach ($memberTypes as $memberType) {
+				if (class_exists($memberType)) {
+					if ($concreteClass === null) {
 						$concreteClass = new \ReflectionClass($memberType);
-					}else{
+					} else {
 						throw new AssumptionFailedError("Two base classes for registry member \$name\" in source $sourceShortClassName???");
 					}
 				}
 			}
 
-			if($commonParent === null){
+			if ($commonParent === null) {
 				$commonParent = $concreteClass;
-			}elseif($commonParent !== false){
-				if($concreteClass === null){
+			} elseif ($commonParent !== false) {
+				if ($concreteClass === null) {
 					$commonParent = false;
-				}else{
-					while($commonParent !== false && !$concreteClass->isSubclassOf($commonParent) && $concreteClass->getName() !== $commonParent->getName()){
+				} else {
+					while ($commonParent !== false && !$concreteClass->isSubclassOf($commonParent) && $concreteClass->getName() !== $commonParent->getName()) {
 						$commonParent = $commonParent->getParentClass();
 					}
 				}
@@ -193,31 +194,31 @@ CLASS;
 TEMPLATE;
 	}
 
-	if($commonParent !== false){
-		if($commonParent === null){
+	if ($commonParent !== false) {
+		if ($commonParent === null) {
 			throw new AssumptionFailedError("Unreachable");
 		}
 		$importClasses[$commonParent->getName()] = true;
 	}
 	ksort($importClasses, SORT_STRING);
 	$imports = 0;
-	foreach(Utils::stringifyKeys($importClasses) as $import => $_){
-		if(!class_exists($import) && !interface_exists($import) && !trait_exists($import)){
+	foreach (Utils::stringifyKeys($importClasses) as $import => $_) {
+		if (!class_exists($import) && !interface_exists($import) && !trait_exists($import)) {
 			throw new AssumptionFailedError("Class $import does not exist");
 		}
 		$reflect = new \ReflectionClass($import);
-		if($reflect->getNamespaceName() === $namespaceName){
+		if ($reflect->getNamespaceName() === $namespaceName) {
 			continue;
 		}
 		$output .= "\nuse $import;";
 		$imports++;
 	}
 	ksort($importFunctions, SORT_STRING);
-	foreach(Utils::stringifyKeys($importFunctions) as $import => $_){
+	foreach (Utils::stringifyKeys($importFunctions) as $import => $_) {
 		$output .= "\nuse function $import;";
 		$imports++;
 	}
-	if($imports > 0){
+	if ($imports > 0) {
 		$output .= "\n";
 	}
 	$output .= "\n/**\n" . $docCommentPrepend . $startClass;
@@ -315,23 +316,24 @@ INIT2;
 	return $output;
 }
 
-function processFile(string $file, string $sourceDir, string $outputDir, string $fileHeader) : void{
+function processFile(string $file, string $sourceDir, string $outputDir, string $fileHeader) : void
+{
 	$contents = file_get_contents($file);
-	if($contents === false){
+	if ($contents === false) {
 		throw new \RuntimeException("Failed to get contents of $file");
 	}
 
-	if(preg_match("/(*ANYCRLF)^namespace (.+);$/m", $contents, $matches) !== 1 || preg_match('/(*ANYCRLF)^((final|abstract)\s+)?class /m', $contents) !== 1){
+	if (preg_match("/(*ANYCRLF)^namespace (.+);$/m", $contents, $matches) !== 1 || preg_match('/(*ANYCRLF)^((final|abstract)\s+)?class /m', $contents) !== 1) {
 		return;
 	}
 	$shortClassName = basename($file, ".php");
 	$namespace = $matches[1];
 	$className = $namespace . "\\" . $shortClassName;
-	if(!class_exists($className)){
+	if (!class_exists($className)) {
 		return;
 	}
 	$reflect = new \ReflectionClass($className);
-	if(!$reflect->isSubclassOf(RegistrySource::class) || !$reflect->isInstantiable()){
+	if (!$reflect->isSubclassOf(RegistrySource::class) || !$reflect->isInstantiable()) {
 		return;
 	}
 
@@ -339,37 +341,37 @@ function processFile(string $file, string $sourceDir, string $outputDir, string 
 	$source = $reflect->newInstance();
 
 	$interfaceClassName = $source->getTargetClassName();
-	if(preg_match('/^[A-Za-z\d_]+$/', $interfaceClassName) !== 1){
+	if (preg_match('/^[A-Za-z\d_]+$/', $interfaceClassName) !== 1) {
 		throw new \RuntimeException("Generated class name $interfaceClassName must contain only letters, numbers and underscores");
 	}
 	$relativeDir = Path::makeRelative(dirname($file), $sourceDir);
 	$generatedRelativeDir = Path::join($outputDir, $relativeDir);
-	if(!@mkdir($generatedRelativeDir, recursive: true) && !is_dir($generatedRelativeDir)){
+	if (!@mkdir($generatedRelativeDir, recursive: true) && !is_dir($generatedRelativeDir)) {
 		throw new \RuntimeException("Failed to create target dir $generatedRelativeDir for generated file for $file");
 	}
 	$generatedFile = Path::join($generatedRelativeDir, $interfaceClassName . ".php");
 	$conflictCheckFile = Path::join(dirname($file), $interfaceClassName . ".php");
 	//Conflict check is only relevant if the output dir is different from the input. If they're the same, the existing
 	//file is probably the previous version of the generated code.
-	if($generatedFile !== $conflictCheckFile && file_exists($conflictCheckFile)){
+	if ($generatedFile !== $conflictCheckFile && file_exists($conflictCheckFile)) {
 		throw new \RuntimeException("Generated class $interfaceClassName seems to conflict with an existing non-generated class: $conflictCheckFile\n");
 	}
 
 	echo "Found registry in $file, will generate interface in $generatedFile\n";
-	if(strcasecmp($interfaceClassName, $shortClassName) === 0){
+	if (strcasecmp($interfaceClassName, $shortClassName) === 0) {
 		throw new \RuntimeException("Generated class name $interfaceClassName cannot be the same as the interface class name (file $file)");
 	}
 
-	try{
+	try {
 		$oldContents = Filesystem::fileGetContents($generatedFile);
-	}catch(\RuntimeException){
+	} catch(\RuntimeException) {
 		$oldContents = "";
 	}
 	$newContents = generateRegistryInterface($namespace, $shortClassName, $source, $fileHeader);
-	if($newContents !== $oldContents){
+	if ($newContents !== $oldContents) {
 		echo "Writing changed file $generatedFile\n";
 		file_put_contents($generatedFile, $newContents);
-	}else{
+	} else {
 		echo "No changes needed for file $generatedFile\n";
 	}
 }
@@ -377,21 +379,21 @@ function processFile(string $file, string $sourceDir, string $outputDir, string 
 require dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 $fileHeader = Filesystem::fileGetContents(__DIR__ . "/templates/header.php");
-if(is_dir($argv[1])){
-	if(file_exists($argv[2]) && !is_dir($argv[2])){
+if (is_dir($argv[1])) {
+	if (file_exists($argv[2]) && !is_dir($argv[2])) {
 		fwrite(STDERR, "Destination for generated files isn't a folder: " . $argv[2] . "\n");
 		exit(1);
 	}
 	/** @var string $file */
-	foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($argv[1], \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_PATHNAME)) as $file){
-		if(!str_ends_with($file, ".php")){
+	foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($argv[1], \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_PATHNAME)) as $file) {
+		if (!str_ends_with($file, ".php")) {
 			continue;
 		}
 
 		processFile($file, $argv[1], $argv[2], $fileHeader);
 	}
-}else{
-	if(file_exists($argv[2]) && !is_file($argv[2])){
+} else {
+	if (file_exists($argv[2]) && !is_file($argv[2])) {
 		fwrite(STDERR, "Destination for generated file already exists and is not a file: " . $argv[2] . "\n");
 		exit(1);
 	}

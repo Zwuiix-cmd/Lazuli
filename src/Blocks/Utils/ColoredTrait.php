@@ -28,14 +28,19 @@ namespace Lazuli\Blocks\Utils;
 
 use pocketmine\block\utils\DyeColor;
 
-trait ColoredTrait{
+trait ColoredTrait
+{
 	/** @var DyeColor */
 	private $color = DyeColor::WHITE;
 
-	public function getColor() : DyeColor{ return $this->color; }
+	public function getColor() : DyeColor
+	{
+		return $this->color;
+	}
 
 	/** @return $this */
-	public function setColor(DyeColor $color) : self{
+	public function setColor(DyeColor $color) : self
+	{
 		$this->color = $color;
 		return $this;
 	}

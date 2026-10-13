@@ -46,29 +46,33 @@ use function mt_rand;
 #[UseDefaultVisual]
 class MyceliumSlab extends Slab
 {
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			LazuliBlocks::DIRT_SLAB()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 
-	public function ticksRandomly() : bool{
+	public function ticksRandomly() : bool
+	{
 		return true;
 	}
 
-	public function onRandomTick() : void{
+	public function onRandomTick() : void
+	{
 		//TODO: light levels
 		$x = mt_rand($this->position->x - 1, $this->position->x + 1);
 		$y = mt_rand($this->position->y - 2, $this->position->y + 2);
 		$z = mt_rand($this->position->z - 1, $this->position->z + 1);
 		$world = $this->position->getWorld();
 		$block = $world->getBlockAt($x, $y, $z);
-		if($block instanceof DirtSlab){
-			if($block->getSide(Facing::UP) instanceof Transparent){
+		if ($block instanceof DirtSlab) {
+			if ($block->getSide(Facing::UP) instanceof Transparent) {
 				BlockEventHelper::spread($block, LazuliBlocks::MYCELIUM_SLAB()->setSlabType($block->getSlabType()), $this);
 			}
 		}

@@ -49,41 +49,45 @@ use function mt_rand;
 #[UseDefaultVisual]
 class GrassSlab extends Slab
 {
-	public function getDropsForCompatibleTool(Item $item) : array{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
 		return [
 			LazuliBlocks::DIRT_SLAB()->asItem()
 		];
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 
-	public function ticksRandomly() : bool{
+	public function ticksRandomly() : bool
+	{
 		return true;
 	}
 
-	public function onRandomTick() : void{
+	public function onRandomTick() : void
+	{
 		$world = $this->position->getWorld();
 		$lightAbove = $world->getFullLightAt($this->position->x, $this->position->y + 1, $this->position->z);
-		if($lightAbove < 4 && $world->getBlockAt($this->position->x, $this->position->y + 1, $this->position->z)->getLightFilter() >= 2){
+		if ($lightAbove < 4 && $world->getBlockAt($this->position->x, $this->position->y + 1, $this->position->z)->getLightFilter() >= 2) {
 			//grass dies
 			BlockEventHelper::spread($this, LazuliBlocks::DIRT_SLAB()
 				->setSlabType($this->getSlabType()), $this
 			);
-		}elseif($lightAbove >= 9){
+		} elseif ($lightAbove >= 9) {
 			//try grass spread
-			for($i = 0; $i < 4; ++$i){
+			for ($i = 0; $i < 4; ++$i) {
 				$x = mt_rand($this->position->x - 1, $this->position->x + 1);
 				$y = mt_rand($this->position->y - 3, $this->position->y + 1);
 				$z = mt_rand($this->position->z - 1, $this->position->z + 1);
 
 				$b = $world->getBlockAt($x, $y, $z);
-				if(
+				if (
 					!($b instanceof DirtSlab) ||
 					$world->getFullLightAt($x, $y + 1, $z) < 4 ||
 					$world->getBlockAt($x, $y + 1, $z)->getLightFilter() >= 2
-				){
+				) {
 					continue;
 				}
 
@@ -94,17 +98,18 @@ class GrassSlab extends Slab
 		}
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool
+	{
 		if (!$this->position->isValid()) {
 			return false;
 		}
 
-		if($this->getSide(Facing::UP)->getTypeId() !== BlockTypeIds::AIR){
+		if ($this->getSide(Facing::UP)->getTypeId() !== BlockTypeIds::AIR) {
 			return false;
 		}
 		$world = $this->position->getWorld();
-		if($face !== Facing::DOWN){
-			if($item instanceof Shovel){
+		if ($face !== Facing::DOWN) {
+			if ($item instanceof Shovel) {
 				$item->applyDamage(1);
 				$newBlock = LazuliBlocks::DIRT_PATH_SLAB()
 					->setSlabType($this->getSlabType());

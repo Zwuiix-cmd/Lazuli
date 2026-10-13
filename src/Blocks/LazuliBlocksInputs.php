@@ -51,17 +51,22 @@ class LazuliBlocksInputs extends RegistrySource
 {
 	public static ?BlockRegistryEvent $registry = null;
 
-	public function getTargetClassName() : string{
+	public function getTargetClassName() : string
+	{
 		return "LazuliBlocks";
 	}
 
-	public function getTargetClassDocComment() : array{
+	public function getTargetClassDocComment() : array
+	{
 		return [
 			"Allows getting a new instance of any block implemented by Lazuli"
 		];
 	}
 
-	public function cloneResults() : bool{ return true; }
+	public function cloneResults() : bool
+	{
+		return true;
+	}
 
 	/**
 	 * @phpstan-template TBlock of Block
@@ -69,7 +74,8 @@ class LazuliBlocksInputs extends RegistrySource
 	 * @phpstan-param class-string<covariant Tile>|null $tileClass
 	 * @phpstan-return TBlock
 	 */
-	private function register(string $name, \Closure $createBlock, ?string $tileClass = null) : Block{
+	private function register(string $name, \Closure $createBlock, ?string $tileClass = null) : Block
+	{
 		$typeId = BlockTypeIds::newId();
 		$block = $createBlock(new BID($typeId, $tileClass));
 		self::registerValue($name, $block);
@@ -83,14 +89,16 @@ class LazuliBlocksInputs extends RegistrySource
 	 * @phpstan-template TBlock of Colored
 	 * @phpstan-param \Closure(BID, DyeColor) : TBlock $createBlock
 	 */
-	private function registerColored(string $suffix, \Closure $createBlock) : void{
-		foreach(DyeColor::cases() as $color){
+	private function registerColored(string $suffix, \Closure $createBlock) : void
+	{
+		foreach (DyeColor::cases() as $color) {
 			$id = strtolower($color->name) . "_" . $suffix;
 			self::register($id, static fn(BID $bid) => $createBlock($bid, $color)->setColor($color));
 		}
 	}
 
-	protected function setup() : void{
+	protected function setup() : void
+	{
 		$woolInfo = static fn() => new Info(new BreakInfo(0.8, ToolType::SHEARS));
 		$concreteInfo = static fn() => new Info(BreakInfo::pickaxe(1.8, ToolTier::WOOD));
 		$concretePowderInfo = static fn() => new Info(BreakInfo::shovel(0.5));

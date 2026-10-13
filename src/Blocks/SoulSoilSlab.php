@@ -41,5 +41,4 @@ use pocketmine\block\Slab;
 #[UseDefaultVisual]
 class SoulSoilSlab extends Slab
 {
-
 }

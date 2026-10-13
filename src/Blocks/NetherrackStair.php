@@ -41,5 +41,4 @@ use pocketmine\block\Stair;
 #[UseDefaultVisual]
 class NetherrackStair extends Stair
 {
-
 }

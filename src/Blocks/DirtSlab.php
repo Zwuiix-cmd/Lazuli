@@ -37,13 +37,14 @@ use pocketmine\world\sound\WaterSplashSound;
 
 class DirtSlab extends Slab
 {
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool
+	{
 		if (!$this->position->isValid()) {
 			return false;
 		}
 
 		$world = $this->position->getWorld();
-		if(($item instanceof Potion || $item instanceof SplashPotion) && $item->getType() === PotionType::WATER){
+		if (($item instanceof Potion || $item instanceof SplashPotion) && $item->getType() === PotionType::WATER) {
 			$item->pop();
 			$world->setBlock($this->position, LazuliBlocks::MUD_SLAB()
 				->setSlabType($this->getSlabType())

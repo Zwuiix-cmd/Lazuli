@@ -103,7 +103,9 @@ function process_libraries(string $basePath, string $targetNamespace) : array
 	$antigenMap = [];
 	$jsonPath = $basePath . DIRECTORY_SEPARATOR . 'libraries.json';
 
-	if (!file_exists($jsonPath)) return ['files' => $libFiles, 'map' => $antigenMap];
+	if (!file_exists($jsonPath)) {
+		return ['files' => $libFiles, 'map' => $antigenMap];
+	}
 
 	$libraries = json_decode(file_get_contents($jsonPath), true);
 	if (!is_array($libraries)) {
@@ -211,7 +213,9 @@ function get_build_files(string $basePath) : array
 
 	foreach ($directories as $dir) {
 		$path = $basePath . DIRECTORY_SEPARATOR . $dir;
-		if (!is_dir($path)) continue;
+		if (!is_dir($path)) {
+			continue;
+		}
 
 		$iterator = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)

@@ -30,9 +30,11 @@ use pocketmine\block\utils\FortuneDropHelper;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 
-trait GravelTrait{
-	public function getDropsForCompatibleTool(Item $item) : array{
-		if(FortuneDropHelper::bonusChanceDivisor($item, 10, 3)){
+trait GravelTrait
+{
+	public function getDropsForCompatibleTool(Item $item) : array
+	{
+		if (FortuneDropHelper::bonusChanceDivisor($item, 10, 3)) {
 			return [
 				VanillaItems::FLINT()
 			];
@@ -41,7 +43,8 @@ trait GravelTrait{
 		return parent::getDropsForCompatibleTool($item);
 	}
 
-	public function isAffectedBySilkTouch() : bool{
+	public function isAffectedBySilkTouch() : bool
+	{
 		return true;
 	}
 }

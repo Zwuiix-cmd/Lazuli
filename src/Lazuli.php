@@ -51,8 +51,5 @@ class Lazuli extends PluginBase
 	{
 		Registries::validate();
 		$this->getLogger()->notice(sprintf("%d blocks loaded", count(LazuliBlocks::getAll())));
-
-        PackPacketHooker::register($this);
-        ExtPack::fromUrl("https://cdn.discordapp.com/attachments/1321869104172240917/1538158937524801608/KitmapV2.zip?ex=6acf7224&is=6ace20a4&hm=12ec52456efe4f2e46f740bdc5ee8b070f66b1a8a7c8101b4f2762df115a2d59&");
     }
 }

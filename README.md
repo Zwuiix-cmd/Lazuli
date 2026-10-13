@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://raw.githubusercontent.com/Zwuiix-cmd/Lazuli/refs/heads/main/icon.png?token=GHSAT0AAAAAAELDNWXZVWNMRLJM5RW4FUI42WON5WA" alt="Logo Lazuli" width="150" />
+    <img src="https://raw.githubusercontent.com/Zwuiix-cmd/Lazuli/refs/heads/main/icon.png" alt="Logo Lazuli" width="150" />
     <br>
     Lazuli
 </h1>

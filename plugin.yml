@@ -1,0 +1,8 @@
+name: Lazuli
+version: 1.0.0
+main: Lazuli\Lazuli
+src-namespace-prefix: Lazuli
+api: 5.0.0
+author: Zwuiix
+depend:
+  - Nexly

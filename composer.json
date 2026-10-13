@@ -1,0 +1,50 @@
+{
+    "name": "zwuiix-cmd/lazuli",
+    "autoload": {
+        "psr-4": {
+            "Lazuli\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "zwuiix",
+            "email": "71025924+Zwuiix-cmd@users.noreply.github.com"
+        }
+    ],
+    "require-dev": {
+        "ext-mbstring": "*",
+        "friendsofphp/php-cs-fixer": "^3.86",
+        "phpstan/phpstan": "^2.2",
+        "axolotl-pm/pocketmine-mp": "dev-stable",
+        "zwuiix-cmd/nexly": "dev-main",
+        "zwuiix-cmd/ext-pack": "dev-main",
+        "nikic/php-parser": "^5.9"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/axolotl-pm/PocketMine-MP",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Zwuiix-cmd/Nexly",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Zwuiix-cmd/ext-pack",
+            "no-api": true
+        }
+    ],
+    "scripts": {
+        "make": [
+            "@composer install --classmap-authoritative --ignore-platform-reqs",
+            "@php -dphar.readonly=0 build/compiler.php"
+        ],
+        "cs-fixer": [
+            "@composer install --classmap-authoritative --ignore-platform-reqs",
+            "./vendor/bin/php-cs-fixer fix -v"
+        ]
+    }
+}

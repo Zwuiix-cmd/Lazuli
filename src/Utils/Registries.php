@@ -27,10 +27,14 @@
 namespace Lazuli\Utils;
 
 use Lazuli\Blocks\LazuliBlocks;
+use Lazuli\Blocks\LazuliBlocksInputs;
+use Nexly\Events\Impl\BlockRegistryEvent;
+use Nexly\Events\NexlyEventManager as NexlyEvent;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\entity\effect\VanillaEffects;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\VanillaItems;
+use pocketmine\plugin\DisablePluginException;
 
 /**
  * @internal
@@ -56,6 +60,17 @@ class Registries
 	/**
 	 * @return void
 	 */
+	public static function inject() : void
+	{
+		NexlyEvent::getInstance()->listen(BlockRegistryEvent::class, static function (BlockRegistryEvent $ev) : void {
+			LazuliBlocksInputs::$registry = $ev;
+			self::init();
+		});
+	}
+
+	/**
+	 * @return void
+	 */
 	public static function init() : void
 	{
 		if (!self::$initialized) {
@@ -72,11 +87,11 @@ class Registries
 	public static function validate() : void
 	{
 		if (!self::$loaded) {
-			throw new \RuntimeException("Vanilla registries have not been loaded. Call Registries::setup() or Registries::init() first.");
+			throw new DisablePluginException("Vanilla registries have not been loaded. Call Registries::setup() or Registries::init() first.");
 		}
 
 		if (!self::$initialized) {
-			throw new \RuntimeException("Lazuli registries have not been initialized. Call Registries::init() first.");
+			throw new DisablePluginException("Lazuli registries have not been initialized. Call Registries::init() first.");
 		}
 	}
 }

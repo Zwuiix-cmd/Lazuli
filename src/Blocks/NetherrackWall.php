@@ -29,6 +29,7 @@ namespace Lazuli\Blocks;
 use Nexly\Blocks\Components\MaterialInstancesBlockComponent;
 use Nexly\Blocks\Components\SoundBlockComponent;
 use Nexly\Blocks\Components\Types\Material;
+use Nexly\Blocks\Components\Types\NexlyGeometry;
 use Nexly\Blocks\Components\Types\RenderMethod;
 use Nexly\Blocks\Components\Types\Target;
 use Nexly\Blocks\Components\Types\UseDefaultVisual;
@@ -38,7 +39,7 @@ use pocketmine\block\Wall;
 #[MaterialInstancesBlockComponent([
 	new Material(texture: 'netherrack', target: Target::ALL, renderMethod: RenderMethod::OPAQUE, isotropic: true),
 ])]
-#[UseDefaultVisual]
+#[UseDefaultVisual(NexlyGeometry::WALL . "_render")]
 class NetherrackWall extends Wall
 {
 }

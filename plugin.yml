@@ -6,3 +6,11 @@ api: 5.0.0
 author: Zwuiix
 depend:
   - Nexly
+commands:
+  lazuli:
+    description: "Check if Lazuli is present on the server"
+    usage: "/lazuli"
+    permission: lazuli.command
+permissions:
+  lazuli.command:
+    default: true
